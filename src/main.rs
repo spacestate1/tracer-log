@@ -89,6 +89,8 @@ pub async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 println!("-d CSV no header mode");
                 println!("-s stats CSV no header mode");
                 println!("-sh stats CSV no header mode");
+                println!("-z Basic data test mode");
+
 
         },
         // one argument passed
@@ -101,13 +103,24 @@ pub async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 let mut rsp2 = ctx.read_input_registers(0x311D, 1).await?;
                 let mut rsp3 = ctx.read_input_registers(0x3100, 19).await?;
                 data::data01(&dt,ar01,rsp.as_mut_slice(), rsp2.as_mut_slice(),rsp3.as_mut_slice());
-            }
+
+                } 
+           ////// Basic test mode ////////
+            else if ar02 == "-z" {
+                let rsp = ctx.read_input_registers(0x311A, 2).await?;
+                println!("Basic data"); 
+                println!("Battery SOC: {:?} percent, Battery voltage: {:?}v detected",rsp[0] as f32, 0.01 * rsp[1] as f32);
+                println!("RS485 connection working")
+                 
+
+
+                }
             ////////Read Device Registers for secondary data ///////////
-            else if ar02 == "-s" { 
+           else if ar02 == "-s" { 
                 let mut rsp4 = ctx.read_input_registers(0x3300, 31).await?;
                 stats::stats01(&dt,ar01,rsp4.as_mut_slice());
-            }
-            else {  
+                }
+           else {  
                 println!("Argument not understood");
                 println!("Available options");
                 println!("-dr Read mode");
@@ -115,14 +128,15 @@ pub async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 println!("-d CSV no header mode");
                 println!("-s stats CSV no header mode");
                 println!("-sh stats CSV no header mode");
-            } 
+                println!("-z Basic data test mode");
+                } 
             
      
-    }, 
-        _ => {
+            }, 
+       _ => {
             // show a help message
            println!("help()");
-        }
+            }
         }
     Ok(())   
     }
