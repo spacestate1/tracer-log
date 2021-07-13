@@ -1,6 +1,5 @@
 pub fn stats01(dt: &str,ar02:&str,rsp4: &mut [u16],) {
            if ar02 == "-s" {
-               println!("DF"); 
 
                println!("{},{:?},{:?},{:?},{:?},{:?},{:?},{:?},{:?},{:?},{:?},{:?},{:?},{:?},{:?},{:?}",dt, 0.01 * rsp4[0] as f32, 0.01 * rsp4[1] as f32,0.01 * rsp4[2] as f32,0.01 * rsp4[3] as f32,0.01 * rsp4[4] as f32,0.01 * rsp4[6] as f32,0.01 * rsp4[8] as f32,0.01 * rsp4[10] as f32,0.01 * rsp4[12] as f32,0.01 * rsp4[14] as f32,0.01 * rsp4[16] as f32,0.01 * rsp4[18] as f32,0.01 * rsp4[26] as f32,rsp4[27] as f32,0.01 * rsp4[29] as f32);
 
@@ -36,11 +35,5 @@ pub fn stats01(dt: &str,ar02:&str,rsp4: &mut [u16],) {
            }
             else {
                 println!("Argument not understood");
-                println!("Available options");
-                println!("-dr Read mode");
-                println!("-dh CSV header mode");
-                println!("-d CSV no header mode");
-                println!("-s stats CSV no header mode");
-                println!("-sh stats CSV no header mode");
             }
 }

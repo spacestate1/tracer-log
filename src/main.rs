@@ -1,60 +1,15 @@
-use std::ops::{Bound, RangeBounds};
-
-////////////////// String char parser //////////////////
-trait StringUtils {
-    fn substring(&self, start: usize, len: usize) -> &str;
-    fn slice(&self, range: impl RangeBounds<usize>) -> &str;
-}
-
-impl StringUtils for str {
-    fn substring(&self, start: usize, len: usize) -> &str {
-        let mut char_pos = 0;
-        let mut byte_start = 0;
-        let mut it = self.chars();
-        loop {
-            if char_pos == start { break; }
-            if let Some(c) = it.next() {
-                char_pos += 1;
-                byte_start += c.len_utf8();
-            }
-            else { break; }
-        }
-        char_pos = 0;
-        let mut byte_end = byte_start;
-        loop {
-            if char_pos == len { break; }
-            if let Some(c) = it.next() {
-                char_pos += 1;
-                byte_end += c.len_utf8();
-            }
-            else { break; }
-        }
-        &self[byte_start..byte_end]
-    }
-    fn slice(&self, range: impl RangeBounds<usize>) -> &str {
-        let start = match range.start_bound() {
-            Bound::Included(bound) | Bound::Excluded(bound) => *bound,
-            Bound::Unbounded => 0,
-        };
-        let len = match range.end_bound() {
-            Bound::Included(bound) => *bound + 1,
-            Bound::Excluded(bound) => *bound,
-            Bound::Unbounded => self.len(),
-        } - start;
-        self.substring(start, len)
-    }
-}
-
 mod data;
 mod stats;
+mod status;
 #[cfg(feature = "rtu")]
 #[tokio::main]
 pub async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    use std::env;
+   // use std::env;
     use chrono::prelude::*;
+    use clap::{App, Arg};
     ////////Get cli arguments ///////////
-    let args: Vec<String> = env::args().collect();
-    ////////Get dGatetime ///////////
+   // let args: Vec<String> = env::args().collect();
+    ////////Get datetime ///////////
     let utc: DateTime<Utc> = Utc::now();
     let format = "%s%6f";
     let dt = utc.format(format).to_string();
@@ -69,75 +24,155 @@ pub async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let port = Serial::from_path(tty_path, &settings).unwrap();
    ////////Connect /////////// 
     let mut ctx = rtu::connect_slave(port, slave).await?;
-    //let rsp4 = ctx.read_input_registers(0x3300, 31).await?;
     
-    //let c01 = ctx.read_coils(2, 1).await?;
-    //let c02 = ctx.read_coils(3, 1).await?;
-    //let c03 = ctx.read_coils(5, 1).await?;
-    //let c04 = ctx.read_coils(6, 1).await?;
 
-  //   println!("Maximum input volt (PV) today {:?}",rsp4[0] as f32);
+////////////////// Parse CLI arguments //////////////////
+    let matches = App::new("tracer-log")
+        .arg(
+            Arg::new("basic-data")
+                .about("CSV data") 
+                .short('a') 
+                .long("data") 
+                .multiple_occurrences(true)
+                )
 
-    ////////Print information ///////////
-    match args.len() {
-        // no arguments passed
-        1 => {
-            println!("Argument not understood");
-                println!("Available options");
-                println!("-dr Read mode");
-                println!("-dh CSV header mode");
-                println!("-d CSV no header mode");
-                println!("-s stats CSV no header mode");
-                println!("-sh stats CSV no header mode");
-                println!("-z Basic data test mode");
+              .arg(
+         Arg::new("basic-data2")
+                .about("CSV data with header")
+                .short('b') 
+                .long("dataheader") 
+                .multiple_occurrences(true)
+
+                 )
+
+              .arg(
+         Arg::new("basic-data-readable")
+                .about("Easy read data") 
+                .short('c') 
+                .long("dataread") 
+                .multiple_occurrences(true)
+
+                 )
+              .arg(
+         Arg::new("stats")
+                .about("CSV stat data") 
+                .short('d') 
+                .long("stats")
+                .multiple_occurrences(true)
+
+                 )
+              .arg(
+         Arg::new("stats2")
+                .about("CSV stat data with header")
+                .short('e')
+                .long("statsheader")
+                .multiple_occurrences(true)
+
+                 )
+
+              .arg(
+         Arg::new("stats3")
+                .about("Readable stats")
+                .short('f')
+                .long("statsreader")
+                .multiple_occurrences(true)
+
+                 )
+
+              .arg(
+         Arg::new("rs485test")
+                .about("Basic RS485 Connection test")
+                .short('g')
+                .long("rstest")
+                .multiple_occurrences(true)
+
+                 )
+
+              .arg(
+         Arg::new("status1")
+                .about("Panel/battery voltage status")
+                .short('i')
+                .long("status")
+                .multiple_occurrences(true)
+
+                 )
 
 
-        },
-        // one argument passed
-        2 => {
-            let ar01 = &args[1]; 
-            let ar02 = ar01.substring(0, 2); 
-            if ar02 == "-d" { 
-                ////////Read Device Registers for basic data ///////////
+////////////////// Match input, get data from registers //////////////////
+
+
+               .get_matches();
+             if matches.is_present("basic-data") {
+
                 let mut rsp = ctx.read_input_registers(0x311A, 2).await?;
                 let mut rsp2 = ctx.read_input_registers(0x311D, 1).await?;
                 let mut rsp3 = ctx.read_input_registers(0x3100, 19).await?;
+                let ar01 = "-d"; 
+
+                data::data01(&dt,ar01,rsp.as_mut_slice(), rsp2.as_mut_slice(),rsp3.as_mut_slice());
+        
+         }
+
+             if matches.is_present("basic-data2") {
+
+                let mut rsp = ctx.read_input_registers(0x311A, 2).await?;
+                let mut rsp2 = ctx.read_input_registers(0x311D, 1).await?;
+                let mut rsp3 = ctx.read_input_registers(0x3100, 19).await?;
+                let ar01 = "-dh";
+
                 data::data01(&dt,ar01,rsp.as_mut_slice(), rsp2.as_mut_slice(),rsp3.as_mut_slice());
 
-                } 
-           ////// Basic test mode ////////
-            else if ar02 == "-z" {
-                let rsp = ctx.read_input_registers(0x311A, 2).await?;
-                println!("Basic data"); 
+         }
+
+             if matches.is_present("basic-data-readable") {
+
+                let mut rsp = ctx.read_input_registers(0x311A, 2).await?;
+                let mut rsp2 = ctx.read_input_registers(0x311D, 1).await?;
+                let mut rsp3 = ctx.read_input_registers(0x3100, 19).await?;
+                let ar01 = "-dr";
+
+                data::data01(&dt,ar01,rsp.as_mut_slice(), rsp2.as_mut_slice(),rsp3.as_mut_slice());
+
+         }
+
+             if matches.is_present("stats") {
+               
+                let mut rsp4 = ctx.read_input_registers(0x3300, 31).await?;
+                let ar01 = "-s";
+                stats::stats01(&dt,ar01,rsp4.as_mut_slice());
+
+             }
+
+             if matches.is_present("stats2") {
+
+                let mut rsp4 = ctx.read_input_registers(0x3300, 31).await?;
+                let ar01 = "-sh";
+                stats::stats01(&dt,ar01,rsp4.as_mut_slice());
+
+             }
+
+             if matches.is_present("stats3") {
+
+                let mut rsp4 = ctx.read_input_registers(0x3300, 31).await?;
+                let ar01 = "-sr";
+                stats::stats01(&dt,ar01,rsp4.as_mut_slice());
+
+             }
+
+             if  matches.is_present("rs485test") {
+
+                 let rsp = ctx.read_input_registers(0x311A, 2).await?;
+                println!("Basic data");
                 println!("Battery SOC: {:?} percent, Battery voltage: {:?}v detected",rsp[0] as f32, 0.01 * rsp[1] as f32);
                 println!("RS485 connection working")
-                 
+             }
 
+             if matches.is_present("status1") { 
+                 let ar01 = "-x";
+                let mut rsp5 = ctx.read_input_registers(0x3200, 3).await?;
+                status::status01(&dt,ar01,rsp5.as_mut_slice());
+             }
 
-                }
-            ////////Read Device Registers for secondary data ///////////
-           else if ar02 == "-s" { 
-                let mut rsp4 = ctx.read_input_registers(0x3300, 31).await?;
-                stats::stats01(&dt,ar01,rsp4.as_mut_slice());
-                }
-           else {  
-                println!("Argument not understood");
-                println!("Available options");
-                println!("-dr Read mode");
-                println!("-dh CSV header mode");
-                println!("-d CSV no header mode");
-                println!("-s stats CSV no header mode");
-                println!("-sh stats CSV no header mode");
-                println!("-z Basic data test mode");
-                } 
-            
-     
-            }, 
-       _ => {
-            // show a help message
-           println!("help()");
-            }
-        }
     Ok(())   
     }
 #[cfg(not(feature = "rtu"))]
