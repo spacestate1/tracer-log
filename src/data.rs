@@ -1,13 +1,13 @@
-pub fn data01(dt: &str,ar02:&str,rsp: &mut [u16], rsp2: &mut [u16],rsp3: &mut [u16],) {
+pub fn data01(dt: &str,rsp: &mut [u16], rsp2: &mut [u16],rsp3: &mut [u16],) {
 
-if ar02 == "-d" {
             println!("{},{:?},{:?},{:?},{:?},{:?},{:?},{:?},{:?},{:?},{:?},{:?},{:?},{:?},{:?},{:?}",dt,rsp[0] as f32, 0.01 * rsp[1] as f32, 0.01 * rsp2[0] as f32,0.01 * rsp3[16] as f32,0.01 * rsp3[17] as f32, 0.01 * rsp3[18] as f32,0.01 * rsp3[12] as f32,0.01 * rsp3[13] as f32,0.01 * rsp3[14] as f32,0.01 * rsp3[2] as f32,0.01 * rsp3[1] as f32,0.01 * rsp3[0] as f32,0.01 * rsp3[4] as f32,0.01 * rsp3[5] as f32,0.01 * rsp3[6] as f32);
-            }
-            else if ar02 == "-dh" {
+}
+            pub fn data02(dt: &str,rsp: &mut [u16], rsp2: &mut [u16],rsp3: &mut [u16],) {
             println!("Time,BatterySOC,Remote_battery_temperature,battery_real_rated_power,battery_temp,temperature_inside_equipment,power_components_temperature,Discharging_equipment_output_voltage,Discharging_equipment_output_current,Discharging_equipment_output_power,Charging_equipment_input_power,Charging_equipment_input_current,Charging_equipment_input_voltage,Charging_equipment_output_voltage,Charging_equipment_output_current,Charging_equipment_output_power");
             println!("{},{:?},{:?},{:?},{:?},{:?},{:?},{:?},{:?},{:?},{:?},{:?},{:?},{:?},{:?},{:?}",dt,rsp[0] as f32, 0.01 * rsp[1] as f32, 0.01 * rsp2[0] as f32,0.01 * rsp3[16] as f32,0.01 * rsp3[17] as f32, 0.01 * rsp3[18] as f32,0.01 * rsp3[12] as f32,0.01 * rsp3[13] as f32,0.01 * rsp3[14] as f32,0.01 * rsp3[2] as f32,0.01 * rsp3[1] as f32,0.01 * rsp3[0] as f32,0.01 * rsp3[4] as f32,0.01 * rsp3[5] as f32,0.01 * rsp3[6] as f32);
             }
-            else if ar02 == "-dr" {
+
+pub fn data03(rsp: &mut [u16], rsp2: &mut [u16],rsp3: &mut [u16],) {
 
                 println!("Basic EPSolar Tracer system info:");
         println!("================================");
@@ -31,13 +31,6 @@ if ar02 == "-d" {
         println!("Charging equipment output voltage: {:?}",0.01 * rsp3[4] as f32);
         println!("Charging equipment output current: {:?}",0.01 * rsp3[5] as f32);
         println!("Charging equipment output power: {:?}",0.01 * rsp3[6] as f32);
-
-            }
-
-            else {
-                println!("Argument not understood");
-            }
-
 
 
 
