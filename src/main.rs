@@ -2,12 +2,14 @@ mod data;
 mod stats;
 mod status;
 mod rating; 
+
 #[cfg(feature = "rtu")]
 #[tokio::main]
 pub async fn main() -> Result<(), Box<dyn std::error::Error>> {
     use chrono::prelude::*;
     use clap::{App, Arg};
-    
+    use std::time::Duration;
+    use tokio::time::timeout;
     ////////Get datetime ///////////
     let utc: DateTime<Utc> = Utc::now();
     let format = "%s%6f";
@@ -17,14 +19,14 @@ pub async fn main() -> Result<(), Box<dyn std::error::Error>> {
     use tokio_serial::{Serial, SerialPortSettings};
     use tokio_modbus::prelude::*;
     let tty_path = "/dev/ttyUSB0";
-    let slave = Slave(0x01);
+    let client01 = Slave(0x01);
     let mut settings = SerialPortSettings::default();
     settings.baud_rate = 115200;
     settings.stop_bits = tokio_serial::StopBits::One;
     let port = Serial::from_path(tty_path, &settings).unwrap();
    
     ////////Connect /////////// 
-    let mut ctx = rtu::connect_slave(port, slave).await?;
+    let mut ctx = rtu::connect_slave(port, client01).await?;
     
 
 ////////////////// Parse CLI arguments //////////////////
@@ -114,19 +116,31 @@ pub async fn main() -> Result<(), Box<dyn std::error::Error>> {
                .get_matches();
              if matches.is_present("basic-data") {
 
-                let mut rsp = ctx.read_input_registers(0x311A, 2).await?;
-                let mut rsp2 = ctx.read_input_registers(0x311D, 1).await?;
-                let mut rsp3 = ctx.read_input_registers(0x3100, 19).await?;
+
+             //   let mut rsp = ctx.read_input_registers(0x311A, 2).await?;
+             //   let mut rsp2 = ctx.read_input_registers(0x311D, 1).await?;
+             //   let mut rsp3 = ctx.read_input_registers(0x3100, 19).await?;
+                  let mut rsp = timeout(Duration::from_secs(5),ctx.read_input_registers(0x311A, 2)).await.expect("Connection timeout").unwrap(); 
+                  let mut rsp2 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x311D, 1)).await.unwrap().unwrap();
+                  let mut rsp3 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x3100, 19)).await.unwrap().unwrap();
+
+                 // let mut rsp = timeout(Duration::from_secs(5),ctx.read_input_registers(0x311A, 2)).await.expect("Connection timed out");
+                //  let mut rsp2 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x311D, 1)).await.expect("Connection timed out");
+                //  let mut rsp3 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x3100, 19)).await.expect("Connection timed out");
 
                 data::data01(&dt,rsp.as_mut_slice(), rsp2.as_mut_slice(),rsp3.as_mut_slice());
+                
         
          }
 
              if matches.is_present("basic-data2") {
 
-                let mut rsp = ctx.read_input_registers(0x311A, 2).await?;
-                let mut rsp2 = ctx.read_input_registers(0x311D, 1).await?;
-                let mut rsp3 = ctx.read_input_registers(0x3100, 19).await?;
+             //   let mut rsp = ctx.read_input_registers(0x311A, 2).await?;
+             //   let mut rsp2 = ctx.read_input_registers(0x311D, 1).await?;
+             //   let mut rsp3 = ctx.read_input_registers(0x3100, 19).await?;
+                  let mut rsp = timeout(Duration::from_secs(5),ctx.read_input_registers(0x311A, 2)).await.expect("Connection timeout").unwrap();
+                  let mut rsp2 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x311D, 1)).await.unwrap().unwrap();
+                  let mut rsp3 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x3100, 19)).await.unwrap().unwrap();
 
                 data::data02(&dt,rsp.as_mut_slice(), rsp2.as_mut_slice(),rsp3.as_mut_slice());
 
@@ -134,9 +148,12 @@ pub async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
              if matches.is_present("basic-data-readable") {
 
-                let mut rsp = ctx.read_input_registers(0x311A, 2).await?;
-                let mut rsp2 = ctx.read_input_registers(0x311D, 1).await?;
-                let mut rsp3 = ctx.read_input_registers(0x3100, 19).await?;
+              //  let mut rsp = ctx.read_input_registers(0x311A, 2).await?;
+              //  let mut rsp2 = ctx.read_input_registers(0x311D, 1).await?;
+              //  let mut rsp3 = ctx.read_input_registers(0x3100, 19).await?;
+                let mut rsp = timeout(Duration::from_secs(5),ctx.read_input_registers(0x311A, 2)).await.expect("Connection timeout").unwrap();
+                let mut rsp2 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x311D, 1)).await.unwrap().unwrap();
+                let mut rsp3 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x3100, 19)).await.unwrap().unwrap();
 
                 data::data03(rsp.as_mut_slice(), rsp2.as_mut_slice(),rsp3.as_mut_slice());
 
@@ -144,21 +161,24 @@ pub async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
              if matches.is_present("stats") {
                
-                let mut rsp4 = ctx.read_input_registers(0x3300, 31).await?;
+                //let mut rsp4 = ctx.read_input_registers(0x3300, 31).await?;
+                let mut rsp4 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x3300, 31)).await.expect("Connection timeout").unwrap();
                 stats::stats01(&dt,rsp4.as_mut_slice());
 
              }
 
              if matches.is_present("stats2") {
 
-                let mut rsp4 = ctx.read_input_registers(0x3300, 31).await?;
+                //let mut rsp4 = ctx.read_input_registers(0x3300, 31).await?;
+                let mut rsp4 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x3300, 31)).await.expect("Connection timeout").unwrap();
                 stats::stats02(&dt,rsp4.as_mut_slice());
 
              }
 
              if matches.is_present("stats3") {
 
-                let mut rsp4 = ctx.read_input_registers(0x3300, 31).await?;
+                //let mut rsp4 = ctx.read_input_registers(0x3300, 31).await?;
+                let mut rsp4 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x3300, 31)).await.expect("Connection timeout").unwrap();
                 stats::stats03(rsp4.as_mut_slice());
 
              }
@@ -172,12 +192,14 @@ pub async fn main() -> Result<(), Box<dyn std::error::Error>> {
              }
 
              if matches.is_present("livestatus1") { 
-                let mut rsp5 = ctx.read_input_registers(0x3200, 3).await?;
+                //let mut rsp5 = ctx.read_input_registers(0x3200, 3).await?;
+                let mut rsp5 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x3200, 3)).await.expect("Connection timeout").unwrap();
                 status::status01(&dt,rsp5.as_mut_slice());
              }
 
              if matches.is_present("rating") {
-                let mut rsp5 = ctx.read_input_registers(0x3000, 9).await?;
+                //let mut rsp5 = ctx.read_input_registers(0x3000, 9).await?;
+                let mut rsp5 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x3200, 3)).await.expect("Connection timeout").unwrap();
                 rating::rating01(&dt,rsp5.as_mut_slice());
              }
 

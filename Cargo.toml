@@ -9,7 +9,8 @@ edition = "2018"
 tokio-modbus = { version = "*" }
 futures = { version = "0.3", optional = true }
 futures-util = { version = "0.3", default-features = false }
-tokio = { version = "0.2", features = ["rt-core"] }
+#tokio = { version = "0.2", features = ["rt-core"] }
+tokio = { version = "0.2", features = ["full"] }
 tokio-util = { version = "0.2", features = ["codec"] }
 tokio-serial = { version = "4.3.3", optional = true, default-features = false }
 chrono = "0.4"
