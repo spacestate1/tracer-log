@@ -12,7 +12,7 @@ pub async fn main() -> Result<(), Box<dyn std::error::Error>> {
     use tokio::time::timeout;
     ////////Get datetime ///////////
     let utc: DateTime<Utc> = Utc::now();
-    let format = "%s%6f";
+    let format = "%s";
     let dt = utc.format(format).to_string();
     
     //////////Load Serial RS485lib //////////
