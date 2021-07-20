@@ -1,2 +1,2 @@
 # tracer-log
-Lightweight program written in Rust  using the Tokio mobus library to pull data via RS485 (with USB adaptor) from the Epever/EPSolar eLOG01 attached to a Tracer MPPT Solar Charge Controller. This can easily be compiled to run on standard hardware as well as a Raspberry Pi or other single boad computers.  
+Lightweight program to record data from Tracer-BN Series solar charge controllers. This works with a USB to RS485 adapter to read and record data as a CSV file or easy to read data points. Output is suitable for a database imports or processing with other programs.  This is also has options to extract data from an attached eLOG01.  
