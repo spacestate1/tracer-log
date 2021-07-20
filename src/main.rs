@@ -39,8 +39,8 @@ pub async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 .multiple_occurrences(true)
                 )
 
-              .arg(
-         Arg::new("basic-data2")
+        .arg(
+         Arg::new("basic-data-header")
                 .about("CSV data with header")
                 .short('b') 
                 .long("dataheader") 
@@ -48,59 +48,23 @@ pub async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
                  )
 
-              .arg(
+        .arg(
          Arg::new("basic-data-readable")
-                .about("Easy read data") 
+                .about("Readable data") 
                 .short('c') 
                 .long("dataread") 
                 .multiple_occurrences(true)
 
                  )
-
-              .arg(
-         Arg::new("stats-data-direct")
-                .about("Stats from EP device")
-                .short('u')
-                .long("statsdirect")
-                .multiple_occurrences(true)
-
-                 )
-
-              .arg(
-         Arg::new("live-data-direct")
-                .about("Direct live data from EP device")
-                .short('w')
-                .long("datadirect")
-                .multiple_occurrences(true)
-
-                 )
-              .arg(
-         Arg::new("csv-live-data-direct")
-                .about("Direct CSV live data from EP device")
-                .short('x')
-                .long("datadirectcsv")
-                .multiple_occurrences(true)
-
-                 )
-
-              .arg(
-         Arg::new("csv-header-live-data-direct")
-                .about("Direct header CSV live data from EP device")
-                .short('y')
-                .long("datadirectcsvheader")
-                .multiple_occurrences(true)
-
-                 )
-
-              .arg(
-         Arg::new("stats")
-                .about("CSV stat data") 
-                .short('d') 
+        .arg(
+         Arg::new("csvstats")
+                .about("CSV stat data")
+                .short('d')
                 .long("stats")
                 .multiple_occurrences(true)
 
                  )
-              .arg(
+        .arg(
          Arg::new("stats2")
                 .about("CSV stat data with header")
                 .short('e')
@@ -109,7 +73,7 @@ pub async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
                  )
 
-              .arg(
+    .arg(
          Arg::new("stats3")
                 .about("Readable stats")
                 .short('f')
@@ -118,7 +82,7 @@ pub async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
                  )
 
-              .arg(
+        .arg(
          Arg::new("rs485test")
                 .about("Basic RS485 Connection test")
                 .short('g')
@@ -127,7 +91,7 @@ pub async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
                  )
 
-              .arg(
+        .arg(
          Arg::new("livestatus1")
                 .about("Live panel/battery voltage status")
                 .short('i')
@@ -136,15 +100,48 @@ pub async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
                  )
 
-              .arg(
+        .arg(
          Arg::new("rating")
                 .about("Equipment rating")
                 .short('j')
                 .long("rating")
                 .multiple_occurrences(true)
+                )
+
+        .arg(
+         Arg::new("stats-data-direct")
+                .about("Stats direct from EP device")
+                .short('u')
+                .long("statsdirect")
+                .multiple_occurrences(true)
 
                  )
 
+        .arg(
+         Arg::new("live-data-direct")
+                .about("Direct data direct from EP device")
+                .short('w')
+                .long("datadirect")
+                .multiple_occurrences(true)
+
+                 )
+        .arg(
+         Arg::new("csv-live-data-direct")
+                .about("Direct data CSV")
+                .short('x')
+                .long("datadirectcsv")
+                .multiple_occurrences(true)
+
+                 )
+
+        .arg(
+         Arg::new("csv-header-live-data-direct")
+                .about("Direct data CSV with header")
+                .short('y')
+                .long("ddatadirectcsvheader")
+                .multiple_occurrences(true)
+
+                 )
 
 ////////////////// Match input, get data from registers //////////////////
 
@@ -166,7 +163,7 @@ pub async fn main() -> Result<(), Box<dyn std::error::Error>> {
         
          }
 
-             if matches.is_present("basic-data2") {
+             if matches.is_present("basic-data-csv") {
 
              //   let mut rsp = ctx.read_input_registers(0x311A, 2).await?;
              //   let mut rsp2 = ctx.read_input_registers(0x311D, 1).await?;
@@ -194,51 +191,45 @@ pub async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
              if matches.is_present("stats-data-direct") {
 
-              //  let mut rsp = ctx.read_input_registers(0x311A, 2).await?;
-              //  let mut rsp2 = ctx.read_input_registers(0x311D, 1).await?;
-              //  let mut rsp3 = ctx.read_input_registers(0x3100, 19).await?;
 
-let mut rsp1 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x3300, 1)).await.expect("Connection timeout").unwrap();
-let mut rsp2 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x3301, 1)).await.expect("Connection timeout").unwrap();
-let mut rsp3 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x3302, 1)).await.expect("Connection timeout").unwrap();
-let mut rsp4 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x3303, 1)).await.expect("Connection timeout").unwrap();
-let mut rsp5 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x3304, 1)).await.expect("Connection timeout").unwrap();
-let mut rsp6 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x3304, 1)).await.expect("Connection timeout").unwrap();
-let mut rsp7 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x3305, 1)).await.expect("Connection timeout").unwrap();
-let mut rsp8 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x3306, 1)).await.expect("Connection timeout").unwrap();
-let mut rsp9 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x3306, 1)).await.expect("Connection timeout").unwrap();
-let mut rsp10 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x3307, 1)).await.expect("Connection timeout").unwrap();
-let mut rsp11 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x3308, 1)).await.expect("Connection timeout").unwrap();
-let mut rsp12 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x3308, 1)).await.expect("Connection timeout").unwrap();
-let mut rsp13 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x3309, 1)).await.expect("Connection timeout").unwrap();
-let mut rsp14 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x330A, 1)).await.expect("Connection timeout").unwrap();
-let mut rsp15 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x330A, 1)).await.expect("Connection timeout").unwrap();
-let mut rsp16 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x330B, 1)).await.expect("Connection timeout").unwrap();
-let mut rsp17 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x330C, 1)).await.expect("Connection timeout").unwrap();
-let mut rsp18 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x330C, 1)).await.expect("Connection timeout").unwrap();
-let mut rsp19 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x330D, 1)).await.expect("Connection timeout").unwrap();
-let mut rsp20 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x330E, 1)).await.expect("Connection timeout").unwrap();
-let mut rsp21 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x330E, 1)).await.expect("Connection timeout").unwrap();
-let mut rsp22 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x330F, 1)).await.expect("Connection timeout").unwrap();
-let mut rsp23 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x3310, 1)).await.expect("Connection timeout").unwrap();
-let mut rsp24 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x3310, 1)).await.expect("Connection timeout").unwrap();
-let mut rsp25 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x3311, 1)).await.expect("Connection timeout").unwrap();
-let mut rsp26 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x3312, 1)).await.expect("Connection timeout").unwrap();
-let mut rsp27 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x3312, 1)).await.expect("Connection timeout").unwrap();
-let mut rsp28 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x3313, 1)).await.expect("Connection timeout").unwrap();
-let mut rsp29 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x3314, 1)).await.expect("Connection timeout").unwrap();
-let mut rsp30 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x3314, 1)).await.expect("Connection timeout").unwrap();
-let mut rsp31 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x3315, 1)).await.expect("Connection timeout").unwrap();
-let mut rsp32 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x331B, 1)).await.expect("Connection timeout").unwrap();
-let mut rsp33 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x331B, 1)).await.expect("Connection timeout").unwrap();
-let mut rsp34 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x331C, 1)).await.expect("Connection timeout").unwrap();
-let mut rsp35 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x331D, 1)).await.expect("Connection timeout").unwrap();
-let mut rsp36 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x331E, 1)).await.expect("Connection timeout").unwrap();
-
-                 data::data04(rsp1.as_mut_slice(),rsp2.as_mut_slice(),rsp3.as_mut_slice(),rsp4.as_mut_slice(),rsp5.as_mut_slice(),rsp6.as_mut_slice(),rsp7.as_mut_slice(),rsp8.as_mut_slice(),rsp9.as_mut_slice(),rsp10.as_mut_slice(),rsp11.as_mut_slice(),rsp12.as_mut_slice(),rsp13.as_mut_slice(),rsp14.as_mut_slice(),rsp15.as_mut_slice(),rsp16.as_mut_slice(),rsp17.as_mut_slice(),rsp18.as_mut_slice(),rsp19.as_mut_slice(),rsp20.as_mut_slice(),rsp21.as_mut_slice(),rsp22.as_mut_slice(),rsp23.as_mut_slice(),rsp24.as_mut_slice(),rsp25.as_mut_slice(),rsp26.as_mut_slice(),rsp27.as_mut_slice(),rsp28.as_mut_slice(),rsp29.as_mut_slice(),rsp30.as_mut_slice(),rsp31.as_mut_slice(),rsp32.as_mut_slice(),rsp33.as_mut_slice(),rsp34.as_mut_slice(),rsp35.as_mut_slice(),rsp36.as_mut_slice());
-                //data::data04(rsp.as_mut_slice(), rsp2.as_mut_slice(),rsp3.as_mut_slice());
-                //data::data04(rsp2.as_mut_slice(),rsp3.as_mut_slice());
-                //data::data04(rsp2.as_mut_slice());
+                let mut rsp1 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x3300, 1)).await.expect("Connection timeout").unwrap();
+                let mut rsp2 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x3301, 1)).await.expect("Connection timeout").unwrap();
+                let mut rsp3 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x3302, 1)).await.expect("Connection timeout").unwrap();
+                let mut rsp4 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x3303, 1)).await.expect("Connection timeout").unwrap();
+                let mut rsp5 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x3304, 1)).await.expect("Connection timeout").unwrap();
+                let mut rsp6 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x3304, 1)).await.expect("Connection timeout").unwrap();
+                let mut rsp7 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x3305, 1)).await.expect("Connection timeout").unwrap();
+                let mut rsp8 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x3306, 1)).await.expect("Connection timeout").unwrap();
+                let mut rsp9 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x3306, 1)).await.expect("Connection timeout").unwrap();
+                let mut rsp10 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x3307, 1)).await.expect("Connection timeout").unwrap();
+                let mut rsp11 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x3308, 1)).await.expect("Connection timeout").unwrap();
+                let mut rsp12 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x3308, 1)).await.expect("Connection timeout").unwrap();
+                let mut rsp13 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x3309, 1)).await.expect("Connection timeout").unwrap();
+                let mut rsp14 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x330A, 1)).await.expect("Connection timeout").unwrap();
+                let mut rsp15 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x330A, 1)).await.expect("Connection timeout").unwrap();
+                let mut rsp16 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x330B, 1)).await.expect("Connection timeout").unwrap();
+                let mut rsp17 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x330C, 1)).await.expect("Connection timeout").unwrap();
+                let mut rsp18 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x330C, 1)).await.expect("Connection timeout").unwrap();
+                let mut rsp19 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x330D, 1)).await.expect("Connection timeout").unwrap();
+                let mut rsp20 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x330E, 1)).await.expect("Connection timeout").unwrap();
+                let mut rsp21 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x330E, 1)).await.expect("Connection timeout").unwrap();
+                let mut rsp22 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x330F, 1)).await.expect("Connection timeout").unwrap();
+                let mut rsp23 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x3310, 1)).await.expect("Connection timeout").unwrap();
+                let mut rsp24 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x3310, 1)).await.expect("Connection timeout").unwrap();
+                let mut rsp25 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x3311, 1)).await.expect("Connection timeout").unwrap();
+                let mut rsp26 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x3312, 1)).await.expect("Connection timeout").unwrap();
+                let mut rsp27 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x3312, 1)).await.expect("Connection timeout").unwrap();
+                let mut rsp28 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x3313, 1)).await.expect("Connection timeout").unwrap();
+                let mut rsp29 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x3314, 1)).await.expect("Connection timeout").unwrap();
+                let mut rsp30 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x3314, 1)).await.expect("Connection timeout").unwrap();
+                let mut rsp31 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x3315, 1)).await.expect("Connection timeout").unwrap();
+                let mut rsp32 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x331B, 1)).await.expect("Connection timeout").unwrap();
+                let mut rsp33 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x331B, 1)).await.expect("Connection timeout").unwrap();
+                let mut rsp34 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x331C, 1)).await.expect("Connection timeout").unwrap();
+                let mut rsp35 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x331D, 1)).await.expect("Connection timeout").unwrap();
+                let mut rsp36 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x331E, 1)).await.expect("Connection timeout").unwrap();
+                
+            data::data04(rsp1.as_mut_slice(),rsp2.as_mut_slice(),rsp3.as_mut_slice(),rsp4.as_mut_slice(),rsp5.as_mut_slice(),rsp6.as_mut_slice(),rsp7.as_mut_slice(),rsp8.as_mut_slice(),rsp9.as_mut_slice(),rsp10.as_mut_slice(),rsp11.as_mut_slice(),rsp12.as_mut_slice(),rsp13.as_mut_slice(),rsp14.as_mut_slice(),rsp15.as_mut_slice(),rsp16.as_mut_slice(),rsp17.as_mut_slice(),rsp18.as_mut_slice(),rsp19.as_mut_slice(),rsp20.as_mut_slice(),rsp21.as_mut_slice(),rsp22.as_mut_slice(),rsp23.as_mut_slice(),rsp24.as_mut_slice(),rsp25.as_mut_slice(),rsp26.as_mut_slice(),rsp27.as_mut_slice(),rsp28.as_mut_slice(),rsp29.as_mut_slice(),rsp30.as_mut_slice(),rsp31.as_mut_slice(),rsp32.as_mut_slice(),rsp33.as_mut_slice(),rsp34.as_mut_slice(),rsp35.as_mut_slice(),rsp36.as_mut_slice());
 
          }
              if matches.is_present("live-data-direct" ) { 
@@ -323,7 +314,7 @@ let mut rsp36 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x331E, 
 
              }
 
-             if matches.is_present("stats") {
+             if matches.is_present("csvstats") {
                
                 //let mut rsp4 = ctx.read_input_registers(0x3300, 31).await?;
                 let mut rsp4 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x3300, 31)).await.expect("Connection timeout").unwrap();
