@@ -33,7 +33,7 @@ pub async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let matches = App::new("tracer-log")
         .arg(
             Arg::new("basic-data")
-                .about("CSV data") 
+                .about("eLog01 CSV data") 
                 .short('a') 
                 .long("data") 
                 .multiple_occurrences(true)
@@ -41,7 +41,7 @@ pub async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
         .arg(
          Arg::new("basic-data-header")
-                .about("CSV data with header")
+                .about("eLog01 CSV data with header")
                 .short('b') 
                 .long("dataheader") 
                 .multiple_occurrences(true)
@@ -50,7 +50,7 @@ pub async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
         .arg(
          Arg::new("basic-data-readable")
-                .about("Readable data") 
+                .about("eLog01 Readable data") 
                 .short('c') 
                 .long("dataread") 
                 .multiple_occurrences(true)
@@ -58,7 +58,7 @@ pub async fn main() -> Result<(), Box<dyn std::error::Error>> {
                  )
         .arg(
          Arg::new("csvstats")
-                .about("CSV stat data")
+                .about("eLog01 CSV stat data")
                 .short('d')
                 .long("stats")
                 .multiple_occurrences(true)
@@ -66,7 +66,7 @@ pub async fn main() -> Result<(), Box<dyn std::error::Error>> {
                  )
         .arg(
          Arg::new("stats2")
-                .about("CSV stat data with header")
+                .about("eLog01 CSV stat data with header")
                 .short('e')
                 .long("statsheader")
                 .multiple_occurrences(true)
@@ -75,7 +75,7 @@ pub async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     .arg(
          Arg::new("stats3")
-                .about("Readable stats")
+                .about("eLog01 Readable stats")
                 .short('f')
                 .long("statsreader")
                 .multiple_occurrences(true)
@@ -93,7 +93,7 @@ pub async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
         .arg(
          Arg::new("livestatus1")
-                .about("Live panel/battery voltage status")
+                .about("eLog01 Live panel/battery voltage status")
                 .short('i')
                 .long("livestatus")
                 .multiple_occurrences(true)
@@ -102,7 +102,7 @@ pub async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
         .arg(
          Arg::new("rating")
-                .about("Equipment rating")
+                .about("eLog01 Equipment rating")
                 .short('j')
                 .long("rating")
                 .multiple_occurrences(true)
@@ -110,7 +110,7 @@ pub async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
         .arg(
          Arg::new("stats-data-direct")
-                .about("Stats direct from EP device")
+                .about("Direct stats from EP device")
                 .short('u')
                 .long("statsdirect")
                 .multiple_occurrences(true)
