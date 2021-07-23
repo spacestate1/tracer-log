@@ -34,3 +34,22 @@ pub fn stats03(rsp4: &mut [u16],) {
 
            
 }
+
+pub fn stats04(rsp1: &mut [u16],) {
+
+    println!("Max input volt (PV) today: {:?}v",0.01 * rsp1[0] as f32);
+    println!("Min input volt (PV) today: {:?}v",0.01 * rsp1[1] as f32);
+    println!("Max battery volt today: {:?}v",0.01 * rsp1[12] as f32);
+    println!("Min battery volt today: {:?}v",0.01 * rsp1[13] as f32);
+    println!("Consumed energy today: {:?}kWh",0.01 * rsp1[4] as f32);
+    println!("Consumed energy this month: {:?}kWh",0.01 * rsp1[6] as f32);
+    println!("Consumed energy year: {:?}kWh",0.01 * rsp1[8] as f32);
+    println!("Total consumed energy: {:?}kWh",0.01 * rsp1[10] as f32);
+    println!("Generated energy today: {:?}kWh",0.01 * rsp1[12] as f32);
+    println!("Generated energy this month: {:?}kWh",0.01 * rsp1[14] as f32);
+    println!("Generated energy this year: {:?}kWh",0.01 * rsp1[16] as f32);
+    println!("Total generated energy : {:?}kWh",0.01 * rsp1[18] as f32);
+    println!("Battery voltage: {:?}v",0.01 * rsp1[26] as f32);
+    println!("Battery temp: {:?}c",0.01 * rsp1[29] as f32);
+    
+    }

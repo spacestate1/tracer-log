@@ -36,49 +36,6 @@ pub fn data03(rsp: &mut [u16], rsp2: &mut [u16],rsp3: &mut [u16],) {
 
 }
 
-    pub fn data04(rsp1: &mut [u16],rsp2: &mut [u16],rsp3: &mut [u16],rsp4: &mut [u16],rsp5: &mut [u16],rsp6: &mut [u16],rsp7: &mut [u16],rsp8: &mut [u16],rsp9: &mut [u16],rsp10: &mut [u16],rsp11: &mut [u16],rsp12: &mut [u16],rsp13: &mut [u16],rsp14: &mut [u16],rsp15: &mut [u16],rsp16: &mut [u16],rsp17: &mut [u16],rsp18: &mut [u16],rsp19: &mut [u16],rsp20: &mut [u16],rsp21: &mut [u16],rsp22: &mut [u16],rsp23: &mut [u16],rsp24: &mut [u16],rsp25: &mut [u16],rsp26: &mut [u16],rsp27: &mut [u16],rsp28: &mut [u16],rsp29: &mut [u16],rsp30: &mut [u16],rsp31: &mut [u16],rsp32: &mut [u16],rsp33: &mut [u16],rsp34: &mut [u16],rsp35: &mut [u16],rsp36: &mut [u16]) {
-
-
-       println!("Maximum input volt (PV) today: {:?}",0.01 * rsp1[0] as f32);
-       println!("Minimum input volt (PV) today: {:?}",0.01 * rsp2[0] as f32);
-       println!("Maximum battery volt today{:?}", 0.01 * rsp3[0] as f32);
-       println!("Minimum battery volt today {:?}", 0.01 * rsp4[0] as f32);
-
-       println!("Consumed energy today: {:?}", 0.01 * rsp5[0] as f32);
-       println!("Consumed energy today low: {:?}", 0.01 * rsp6[0] as f32);
-       println!("Consumed energy today high: {:?}", 0.01 * rsp7[0] as f32);
-       println!("Consumed energy this month: {:?}", 0.01 * rsp8[0] as f32);
-       println!("Consumed energy this month low:{:?}", 0.01 * rsp9[0] as f32);
-       println!("Consumed energy this month high:{:?}", 0.01 * rsp10[0] as f32);
-       println!("Consumed energy this year{:?}", 0.01 * rsp11[0] as f32);
-       println!("Consumed energy this year low: {:?}", 0.01 * rsp12[0] as f32);
-       println!("Consumed energy this year high: {:?}", 0.01 * rsp13[0] as f32);
-       println!("Total consumed energy: {:?}", 0.01 * rsp14[0] as f32);
-       println!("Total consumed energy low: {:?}", 0.01 * rsp15[0] as f32);
-       println!("Total consumed energy high:{:?}", 0.01 * rsp16[0] as f32);
-       println!("Generated energy today: {:?}", 0.01 * rsp17[0] as f32);
-       println!("Generated energy today Low: {:?}", 0.01 * rsp18[0] as f32);
-       println!("Generated energy today high:{:?}", 0.01 * rsp19[0] as f32);
-       println!("Generated energy this month: {:?}", 0.01 * rsp20[0] as f32);
-       println!("Generated energy this month Low: {:?}", 0.01 * rsp21[0] as f32);
-       println!("Generated energy this month High: {:?}", 0.01 * rsp22[0] as f32);
-       println!("Generated energy this year: {:?}", 0.01 * rsp23[0] as f32);
-       println!("Generated energy this year Low: {:?}", 0.01 * rsp24[0] as f32);
-       println!("Generated energy this year High: {:?}", 0.01 * rsp25[0] as f32);
-       println!("Total generated energy: {:?}", 0.01 * rsp26[0] as f32);
-       println!("Total generated energy Low: {:?}", 0.01 * rsp27[0] as f32);
-       println!("Total Generated energy High: {:?}", 0.01 * rsp28[0] as f32);
-       println!("Carbon dioxide reduction: {:?}", 0.01 * rsp29[0] as f32);
-       println!("Carbon dioxide reduction Low: {:?}", 0.01 * rsp30[0] as f32);
-       println!("Carbon dioxide reduction High: {:?}", 0.01 * rsp31[0] as f32);
-       println!("Battery Current: {:?}", 0.01 * rsp32[0] as f32);
-       println!("Battery Current Low: {:?}", 0.01 * rsp33[0] as f32);
-       println!("Battery Current High: {:?}", 0.01 * rsp34[0] as f32);
-       println!("Battery Temp: {:?}", 0.01 * rsp35[0] as f32);
-       println!("Ambient Temp: {:?}", 0.01 * rsp36[0] as f32);
-       
-     }
-
 
     pub fn data05(rsp1: &mut [u16],rsp2: &mut [u16],rsp3: &mut [u16])
                   {
