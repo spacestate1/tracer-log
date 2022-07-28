@@ -1,3 +1,8 @@
+use std::fs::OpenOptions;
+use std::io::{BufWriter, Write};
+use std::fs::File;
+use std::path::Path;
+
 pub fn data01(dt: &str,rsp: &mut [u16], rsp2: &mut [u16],rsp3: &mut [u16],) {
 
             println!("{},{:?},{:?},{:?},{:?},{:?},{:?},{:?},{:?},{:?},{:?},{:?},{:?},{:?},{:?},{:?}",dt,rsp[0] as f32, 0.01 * rsp[1] as f32, 0.01 * rsp2[0] as f32,0.01 * rsp3[16] as f32,0.01 * rsp3[17] as f32, 0.01 * rsp3[18] as f32,0.01 * rsp3[12] as f32,0.01 * rsp3[13] as f32,0.01 * rsp3[14] as f32,0.01 * rsp3[2] as f32,0.01 * rsp3[1] as f32,0.01 * rsp3[0] as f32,0.01 * rsp3[4] as f32,0.01 * rsp3[5] as f32,0.01 * rsp3[6] as f32);
@@ -77,3 +82,24 @@ pub fn data07(dt: &str,rsp1: &mut [u16],rsp2: &mut [u16],rsp3: &mut [u16])
         println!("{},{:?},{:?},{:?},{:?},{:?},{:?},{:?},{:?},{:?},{:?},{:?},{:?},{:?},{:?},{:?},{:?},{:?},{:?}",dt,0.01 * rsp1[0] as f32, 0.01 * rsp1[1] as f32, 0.01 * rsp1[2] as f32,0.01 * rsp1[3] as f32,0.01 * rsp1[4] as f32, 0.01 * rsp1[5] as f32,0.01 * rsp1[6] as f32,0.01 * rsp1[7] as f32,0.01 * rsp1[8] as f32,0.01 * rsp1[9] as f32,0.01 * rsp1[10] as f32,0.01 * rsp1[11] as f32,0.01 * rsp1[16] as f32,0.01 * rsp1[17] as f32,0.01 * rsp1[18] as f32, rsp2[0] as f32, 0.01 * rsp1[19] as f32, 0.01 * rsp3[0] as f32);
 }
 
+
+
+    pub fn data08(dt: &str,rsp1: &mut [u16],rsp2: &mut [u16],rsp3: &mut [u16])
+     {
+         let xdata = format!("{},{:?},{:?},{:?},{:?},{:?},{:?},{:?},{:?},{:?},{:?},{:?},{:?},{:?},{:?},{:?},{:?},{:?},{:?}\n",dt,0.01 * rsp1[0] as f32, 0.01 * rsp1[1] as f32, 0.01 * rsp1[2] as f32,0.01 * rsp1[3] as f32,0.01 * rsp1[4] as f32, 0.01 * rsp1[5] as f32,0.01 * rsp1[6] as f32,0.01 * rsp1[7] as f32,0.01 * rsp1[8] as f32,0.01 * rsp1[9] as f32,0.01 * rsp1[10] as f32,0.01 * rsp1[11] as f32,0.01 * rsp1[16] as f32,0.01 * rsp1[17] as f32,0.01 * rsp1[18] as f32, rsp2[0] as f32, 0.01 * rsp1[19] as f32, 0.01 * rsp3[0] as f32);
+    let path = "data01";
+     let rs;
+    rs = Path::new(path).exists();
+    if rs == false{
+        File::create(path).ok();
+         }
+    else {
+        let data_file = OpenOptions::new()
+        .write(true)
+        .append(true)
+        .open(path)
+        .expect("unable to open file");
+        let mut write_file = BufWriter::new(data_file);
+        write!(write_file, "{}", xdata).ok();
+        }
+    }

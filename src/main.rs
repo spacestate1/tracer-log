@@ -161,6 +161,15 @@ pub async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
                  )
 
+                .arg(
+         Arg::new("csv-live-data-direct-file")
+                .about("Direct data CSV to file")
+                .short('z')
+                .long("datadirectcsvfile")
+                .multiple_occurrences(true)
+
+                 )
+
 ////////////////// Match input, get data from registers //////////////////
 
 
@@ -246,6 +255,17 @@ pub async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 
              }
+
+                          if matches.is_present("csv-live-data-direct-file" ) {
+                 let mut rsp1 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x3100, 20)).await.expect("Connection timeout").unwrap();
+                 let mut rsp2 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x311A, 1)).await.expect("Connection timeout").unwrap();
+                 let mut rsp3 = timeout(Duration::from_secs(5),ctx.read_input_registers(0x311D, 1)).await.expect("Connection timeout").unwrap();
+
+                 data::data08(&dt, rsp1.as_mut_slice(),rsp2.as_mut_slice(),rsp3.as_mut_slice());
+
+             }
+
+
 
 
              if matches.is_present("ratings-direct" ) {
