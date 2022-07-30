@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+
+<meta charset="utf-8">
+<style> 
+body { font: 12px Arial;}
+</style>
+<!-- Load d3.js -->
+<script src="d3.v4.js"></script>
+
+<!-- Create a div where the graph will take place -->
+<div id="power-graph1"></div>
+<script>
+
+// set the dimensions and margins of the graph
+var margin = {top: 40, right: 30, bottom: 30, left: 60},
+    width = 460 - margin.left - margin.right,
+    height = 400 - margin.top - margin.bottom;
+
+// append the svg object to the body of the page
+var svg = d3.select("#power-graph1")
+  .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+
+  d3.csv("711_2022.csv",
+	  
+  // When reading the csv, I must format variables:
+  function(d){
+    return { date : d3.timeParse("%s")(d.timestamp), value : d.pv_array_voltage }
+  },
+
+  // Now I can use this dataset:
+  function(data) {
+
+    // Add X axis --> it is a date format
+    var x = d3.scaleTime()
+      .domain(d3.extent(data, function(d) { return d.date; }))
+      .range([ 0, width ]);
+    svg.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x));
+
+    // Add Y axis
+    var y = d3.scaleLinear()
+      .domain([0, d3.max(data, function(d) { return +d.value; })])
+      .range([ height, 0 ]);
+    svg.append("g")
+      .call(d3.axisLeft(y));
+
+    // Add the line
+    svg.append("path")
+      .datum(data)
+      .attr("fill", "none")
+      .attr("stroke", "steelblue")
+      .attr("stroke-width", 1.5)
+      .attr("d", d3.line()
+        .x(function(d) { return x(d.date) })
+        .y(function(d) { return y(d.value) })
+        )
+     svg.append("text")
+    .attr("class", "y label")
+    .attr("text-anchor", "end")
+    .attr("y", -40)
+    .attr("dy", ".75em")
+    .attr("transform", "rotate(-90)")
+    .text("Volts");
+
+
+
+	 svg.append("text")      // text label for the x axis
+        .attr("x", 10 )
+        .attr("y", 370 )
+        .style("text-anchor", "middle")
+        .text("Date");
+
+        svg.append("text")
+        .attr("x", (width / 2))             
+        .attr("y", -4 - (margin.top / 2))
+        .attr("text-anchor", "middle")  
+        .style("font-size", "16px") 
+        .text("PV Array Voltage");
+})
+
+</script>
+
+<div id="power-graph2"></div>
+<script>
+
+// set the dimensions and margins of the graph
+var margin = {top: 40, right: 30, bottom: 30, left: 60},
+    width = 460 - margin.left - margin.right,
+    height = 400 - margin.top - margin.bottom;
+
+// append the svg object to the body of the page
+var svg1 = d3.select("#power-graph1")
+  .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+
+//Read the data
+//d3.csv("https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/3_TwoNumOrdered_comma.csv",
+  d3.csv("711_2022.csv",
+	  
+  // When reading the csv, I must format variables:
+  function(d){
+    return { date : d3.timeParse("%s")(d.timestamp), value : d.pv_array_power }
+  },
+
+  // Now I can use this dataset:
+  function(data) {
+
+    // Add X axis --> it is a date format
+    var x = d3.scaleTime()
+      .domain(d3.extent(data, function(d) { return d.date; }))
+      .range([ 0, width ]);
+    svg1.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x));
+
+    // Add Y axis
+    var y = d3.scaleLinear()
+      .domain([0, d3.max(data, function(d) { return +d.value; })])
+      .range([ height, 0 ]);
+    svg1.append("g")
+      .call(d3.axisLeft(y));
+
+    // Add the line
+    svg1.append("path")
+      .datum(data)
+      .attr("fill", "none")
+      .attr("stroke", "steelblue")
+      .attr("stroke-width", 1.5)
+      .attr("d", d3.line()
+        .x(function(d) { return x(d.date) })
+        .y(function(d) { return y(d.value) })
+        )
+         svg1.append("text")
+    .attr("class", "y label")
+    .attr("text-anchor", "end")
+    .attr("y", -40)
+    .attr("dy", ".75em")
+    .attr("transform", "rotate(-90)")
+    .text("Watts");
+
+
+	  svg1.append("text")
+        .attr("x", (width / 2))
+        .attr("y", -4 - (margin.top / 2))
+        .attr("text-anchor", "middle")
+        .style("font-size", "16px")
+        .text("PV Array Power");
+
+})
+
+</script>
+
+<div id="power-graph3"></div>
+
+<script>
+
+// set the dimensions and margins of the graph
+var margin = {top: 40, right: 30, bottom: 60, left: 60},
+    width = 460 - margin.left - margin.right,
+    height = 400 - margin.top - margin.bottom;
+
+// append the svg object to the body of the page
+var svg2 = d3.select("#power-graph1")
+  .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+
+//Read the data
+  d3.csv("711_2022.csv",
+	  
+  // When reading the csv, I must format variables:
+  function(d){
+    return { date : d3.timeParse("%s")(d.timestamp), value : d.remote_battery_temperature }
+  },
+
+  // Now I can use this dataset:
+  function(data) {
+
+    // Add X axis --> it is a date format
+    var x = d3.scaleTime()
+      .domain(d3.extent(data, function(d) { return d.date; }))
+      .range([ 0, width ]);
+    svg2.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x));
+
+    // Add Y axis
+    var y = d3.scaleLinear()
+      .domain([0, d3.max(data, function(d) { return +d.value; })])
+      .range([ height, 0 ]);
+    svg2.append("g")
+      .call(d3.axisLeft(y));
+
+    // Add the line
+    svg2.append("path")
+      .datum(data)
+      .attr("fill", "none")
+      .attr("stroke", "steelblue")
+      .attr("stroke-width", 1.5)
+      .attr("d", d3.line()
+        .x(function(d) { return x(d.date) })
+        .y(function(d) { return y(d.value) })
+        ) 
+svg2.append("text")      // text label for the x axis
+        .attr("x", 10 )
+        .attr("y", 370 )
+        .style("text-anchor", "middle")
+        .text("Date");
+
+     svg2.append("text")
+    .attr("class", "y label")
+    .attr("text-anchor", "end")
+    .attr("y", -40)
+    .attr("dy", ".75em")
+    .attr("transform", "rotate(-90)")
+    .text("Degrees C");
+
+	  svg2.append("text")
+        .attr("x", (width / 2))             
+        .attr("y", -4 - (margin.top / 2))
+        .attr("text-anchor", "middle")  
+        .style("font-size", "16px") 
+        .text("Ambient Tempature C");
+}) 
+
+</script>
+
+
+<script>
+
+// set the dimensions and margins of the graph
+var margin = {top: 40, right: 30, bottom: 60, left: 60},
+    width = 460 - margin.left - margin.right,
+    height = 400 - margin.top - margin.bottom;
+
+// append the svg object to the body of the page
+var svg3 = d3.select("#power-graph2")
+  .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+
+//Read the data
+  d3.csv("711_2022.csv",
+	  
+  // When reading the csv, I must format variables:
+  function(d){
+    return { date : d3.timeParse("%s")(d.timestamp), value : d.discharging_equipment_output_power }
+  },
+
+  // Now I can use this dataset:
+  function(data) {
+
+    // Add X axis --> it is a date format
+    var x = d3.scaleTime()
+      .domain(d3.extent(data, function(d) { return d.date; }))
+      .range([ 0, width ]);
+    svg3.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x));
+
+    // Add Y axis
+    var y = d3.scaleLinear()
+      .domain([0, d3.max(data, function(d) { return +d.value; })])
+      .range([ height, 0 ]);
+    svg3.append("g")
+      .call(d3.axisLeft(y));
+
+    // Add the line
+    svg3.append("path")
+      .datum(data)
+      .attr("fill", "none")
+      .attr("stroke", "steelblue")
+      .attr("stroke-width", 1.5)
+      .attr("d", d3.line()
+        .x(function(d) { return x(d.date) })
+        .y(function(d) { return y(d.value) })
+        ) 
+
+	  svg3.append("text")
+    .attr("class", "y label")
+    .attr("text-anchor", "end")
+    .attr("y", -40)
+    .attr("dy", ".75em")
+    .attr("transform", "rotate(-90)")
+    .text("Watts");
+})
+
+          svg3.append("text")
+        .attr("x", (width / 2))
+        .attr("y", -4 - (margin.top / 2))
+        .attr("text-anchor", "middle")
+        .style("font-size", "16px")
+        .text("Discharge Output Power");
+
+</script>
+
+<script>
+
+// set the dimensions and margins of the graph
+var margin = {top: 40, right: 30, bottom: 60, left: 60},
+    width = 460 - margin.left - margin.right,
+    height = 400 - margin.top - margin.bottom;
+
+// append the svg object to the body of the page
+var svg4 = d3.select("#power-graph2")
+  .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+
+//Read the data
+  d3.csv("711_2022.csv",
+	  
+  // When reading the csv, I must format variables:
+  function(d){
+    return { date : d3.timeParse("%s")(d.timestamp), value : d.battery_soc }
+  },
+
+  // Now I can use this dataset:
+  function(data) {
+
+    // Add X axis --> it is a date format
+    var x = d3.scaleTime()
+      .domain(d3.extent(data, function(d) { return d.date; }))
+      .range([ 0, width ]);
+    svg4.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x));
+
+    // Add Y axis
+    var y = d3.scaleLinear()
+      .domain([0, d3.max(data, function(d) { return +d.value; })])
+      .range([ height, 0 ]);
+    svg4.append("g")
+      .call(d3.axisLeft(y));
+
+    // Add the line
+    svg4.append("path")
+      .datum(data)
+      .attr("fill", "none")
+      .attr("stroke", "steelblue")
+      .attr("stroke-width", 1.5)
+      .attr("d", d3.line()
+        .x(function(d) { return x(d.date) })
+        .y(function(d) { return y(d.value) })
+        ) 
+}) 
+      svg4.append("text")
+    .attr("class", "y label")
+    .attr("text-anchor", "end")
+    .attr("y", -40)
+    .attr("dy", ".75em")
+    .attr("transform", "rotate(-90)")
+    .text("Percentage");
+
+
+          svg4.append("text")
+        .attr("x", (width / 2))             
+        .attr("y", -4 - (margin.top / 2))
+        .attr("text-anchor", "middle")  
+        .style("font-size", "16px") 
+        .text("Battery Charge Percentage");
+
+</script>
+<script>
+
+// set the dimensions and margins of the graph
+var margin = {top: 40, right: 30, bottom: 60, left: 60},
+    width = 460 - margin.left - margin.right,
+    height = 400 - margin.top - margin.bottom;
+
+// append the svg object to the body of the page
+var svg5 = d3.select("#power-graph2")
+  .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+
+//Read the data
+  d3.csv("711_2022.csv",
+	  
+  // When reading the csv, I must format variables:
+  function(d){
+    return { date : d3.timeParse("%s")(d.timestamp), value : d.discharging_equipment_output_voltage }
+  },
+
+  // Now I can use this dataset:
+  function(data) {
+
+    // Add X axis --> it is a date format
+    var x = d3.scaleTime()
+      .domain(d3.extent(data, function(d) { return d.date; }))
+      .range([ 0, width ]);
+    svg5.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x));
+
+    // Add Y axis
+    var y = d3.scaleLinear()
+      .domain([0, d3.max(data, function(d) { return +d.value; })])
+      .range([ height, 0 ]);
+    svg5.append("g")
+      .call(d3.axisLeft(y));
+
+    // Add the line
+    svg5.append("path")
+      .datum(data)
+      .attr("fill", "none")
+      .attr("stroke", "steelblue")
+      .attr("stroke-width", 1.5)
+      .attr("d", d3.line()
+        .x(function(d) { return x(d.date) })
+        .y(function(d) { return y(d.value) })
+        ) 
+}) 
+
+
+         svg5.append("text")
+    .attr("class", "y label")
+    .attr("text-anchor", "end")
+    .attr("y", -40)
+    .attr("dy", ".75em")
+    .attr("transform", "rotate(-90)")
+    .text("Volts");
+
+         svg5.append("text")
+        .attr("x", (width / 2))             
+        .attr("y", -4 - (margin.top / 2))
+        .attr("text-anchor", "middle")  
+        .style("font-size", "16px") 
+        .text("Discharge output Voltage");
+
+
+</script>
+
+
+
+
+
+
+</script>
