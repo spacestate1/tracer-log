@@ -2,6 +2,7 @@ use std::fs::OpenOptions;
 use std::io::{BufWriter, Write};
 use std::fs::File;
 use std::path::Path;
+use chrono::{DateTime, Utc};
 
 pub fn data01(dt: &str,rsp: &mut [u16], rsp2: &mut [u16],rsp3: &mut [u16],) {
 
@@ -87,17 +88,28 @@ pub fn data07(dt: &str,rsp1: &mut [u16],rsp2: &mut [u16],rsp3: &mut [u16])
     pub fn data08(dt: &str,rsp1: &mut [u16],rsp2: &mut [u16],rsp3: &mut [u16])
      {
          let xdata = format!("{},{:?},{:?},{:?},{:?},{:?},{:?},{:?},{:?},{:?},{:?},{:?},{:?},{:?},{:?},{:?},{:?},{:?},{:?}\n",dt,0.01 * rsp1[0] as f32, 0.01 * rsp1[1] as f32, 0.01 * rsp1[2] as f32,0.01 * rsp1[3] as f32,0.01 * rsp1[4] as f32, 0.01 * rsp1[5] as f32,0.01 * rsp1[6] as f32,0.01 * rsp1[7] as f32,0.01 * rsp1[8] as f32,0.01 * rsp1[9] as f32,0.01 * rsp1[10] as f32,0.01 * rsp1[11] as f32,0.01 * rsp1[16] as f32,0.01 * rsp1[17] as f32,0.01 * rsp1[18] as f32, rsp2[0] as f32, 0.01 * rsp1[19] as f32, 0.01 * rsp3[0] as f32);
-    let path = "data01";
      let rs;
-    rs = Path::new(path).exists();
+     let now: DateTime<Utc> = Utc::now();
+     let path = format!("solar_data_{}.csv",now.format("%b-%Y"));
+     //let path = "data01";
+     //println!("UTC now in a custom format is: {}", now.format("%a %b %e %T %Y"));
+    rs = Path::new(&path).exists();
     if rs == false{
-        File::create(path).ok();
+        File::create(&path).ok();
+        let data_file = OpenOptions::new()
+        .write(true)
+        .append(true)
+        .open(&path)
+        .expect("unable to open file");
+        let mut write_file = BufWriter::new(data_file);
+        write!(write_file, "timestamp,pv_array_voltage,pv_array_current,pv_array_power,charging_equipment_input_power_high,charging_equipment_output_voltage,charging_equipment_output_current,charging_equipment_output_power,charging_equipment_output_power_high,discharging_equipment_output_voltage,discharging_equipment_output_current,discharging_equipment_output_power,discharging_equipment_output_power_high,battery_temp,temperature_inside_equipment,heat_sink_temp,battery_soc,remote_battery_temperature,current_system_rated_voltage\n").ok();
+    
          }
     else {
         let data_file = OpenOptions::new()
         .write(true)
         .append(true)
-        .open(path)
+        .open(&path)
         .expect("unable to open file");
         let mut write_file = BufWriter::new(data_file);
         write!(write_file, "{}", xdata).ok();
